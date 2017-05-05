@@ -1,34 +1,37 @@
-var dist = "../codebase/";
-var sources = "./";
+var dist = "web/dhtmlx/";
+var sources = "./vendor/dhtmlx/suite/sources/";
 var skin = "material"; //material, skyblue, web, terrace
 
 var components = {
+		"common":       true,
+		"container":    false,//dependencies: accordion, layout, tabbar, sidebar, carousel, windows
+		"core":         true,
 		"calendar":     true,
-		"combo":        true,
-		"colorpicker":  true,
-		"slider":       true,
-		"popup":        true,
-		"menu":         true,
-		"ribbon":       true,
-		"toolbar":      true,
-		"editor":       true,
-		"chart":        true,
-		"dataview":     true,
-		"list":         true,
-		"tree":         true,
-		"treeview":     true,
+		"combo":        false,
+		"colorpicker":  false,
+		"slider":       false,
+		"popup":        false,
+		"menu":         false,
+		"ribbon":       false,
+		"toolbar":      false,
+		"editor":       false,
+		"chart":        false,
+		"dataview":     false,
+		"list":         false,
+		"tree":         false,
+		"treeview":     false,
 		"grid":         true,
 		"treegrid":     true,
-		"form":         true,
-		"accordion":    true,
-		"layout":       true,
-		"tabbar":       true,
-		"sidebar":      true,
-		"carousel":     true,
-		"windows":      true,
-		"message":      true,
-		"datastore":    true,
-		"dataprocessor":true,
+		"form":         false,
+		"accordion":    false,
+		"layout":       false,
+		"tabbar":       false,
+		"sidebar":      false,
+		"carousel":     false,
+		"windows":      false,
+		"message":      false,
+		"datastore":    false,
+		"dataprocessor":false,
 		"connector":    true
 };
 
@@ -56,7 +59,8 @@ gulp.task("dhtmlx-clean", function(){
 })
 gulp.task("dhtmlx-compile", ["dhtmlx-clean"], function(){
 
-	var parts = extend(components, config);
+	//var parts = extend(components, config);
+	var parts = components;
 
 	var s_files   = files(config.static, parts)
 	var s_images  = images(config.folders, parts);
@@ -72,7 +76,7 @@ gulp.task("dhtmlx-compile", ["dhtmlx-clean"], function(){
 
 	var s_cssfile = cssfiles(config.folders, parts)
 					.pipe(concat(config.name+".css"))
-					.pipe(replace("../imgs","./imgs"))
+					.pipe(replace("../imgs","./dhtmlx/imgs"))
 					.pipe(clean({
 						compatibility: "ie7"
   					}))
@@ -111,8 +115,9 @@ function images(src, cfg){
 	var out = [];
 	for (var i=0; i<src.length; i++){
 		if (cfg[src[i].component]){
-			var path = src[i].file+"/codebase/imgs/dhx"+(src[i].imgs || src[i].component)+"_"+skin+"/**/*";
-			out.push(gulp.src(sources+path, { base: src[i].file+"/codebase" }));
+			var path = src[i].file+"/codebase/imgs/dhx"+(src[i].imgs || src[i].component)+"_"+skin+"/**";
+			out.push(gulp.src(sources+path, { base: sources+src[i].file+"/codebase" }));
+			//console.log(sources+path, { base: sources+src[i].file+"/codebase" });
 		}
 	}
 
